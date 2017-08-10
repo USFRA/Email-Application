@@ -1,0 +1,144 @@
+﻿@model IEnumerable<WebApplication1.Models.BroadcastingEmail>
+
+@{
+    ViewBag.Title = "Drafts";
+}
+<style>
+    .popup {
+        /*width: 200px;
+        height: 100px;*/
+        background-color: #ffffff;
+        /*left: 300px;
+        top: 200px;*/
+        position: absolute;
+        display: none;
+        border: 1px solid #808080;
+        max-height: 450px;
+    }
+</style>
+
+@Scripts.Render("~/Scripts/jquery-3.1.1.min.js")
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+
+        $(".clickHere").click(function (event) {
+                if ($('.popup').is(":visible")) {
+                    $('.popup').fadeOut(250);
+                }
+                else {
+                    $('.popup').fadeIn(250);
+                    var id = $(this).attr('data-id');
+                    getContent(id);
+                    //center popup
+                    var top = document.documentElement.scrollTop;
+                    var popupWidth = $('#divPopup').width();
+                    var popupHeight = $('#divPopup').height();
+                    $('#divPopup').css({
+                        position: 'absolute',
+                        top: $(window).height() / 2 - popupHeight / 2,
+                        left: $(window).width() / 2 - popupWidth / 2,
+                        display: 'block',
+                        zIndex: 1000
+                    });
+                }
+                event.stopPropagation();
+            });
+
+        $(document).click(function (event) {
+            if ($('.popup').is(":visible"))
+                $('.popup').fadeOut(250);
+        });
+
+        $("#popup-close-btn").click(function (event) {
+            $('#divPopup').css({ display: 'none' })
+            event.stopPropagation();
+        });
+
+    });
+
+
+    function getContent(id) {
+        var myURL = '@Session["AppURL"]';
+        
+        $.ajax({
+            url: myURL + "/email/popup",
+            method:"GET",
+            data: {'id': id },
+            beforeSend: function() {
+            },
+            success: function(data) {
+                $('#divPopup').html(data);
+            },
+            error: function(error) {
+                alert("Error in request.");
+            }
+        });
+    }
+
+</script>
+<h2>Drafts</h2>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<div class="popup" id="divPopup" style="display:none; position:absolute; top:0px; left: 0px; height:76%; width:750px; margin: 0px; overflow:scroll;"></div>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FromEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Receiver)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.ReadReceiptTo)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Subject)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Body)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Created)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FromEmail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Receiver)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.ReadReceiptTo)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Subject)
+        </td>
+        <td>
+            <a href="#" data-id='@item.Id' class="clickHere" id='DraftSelect_@(item.Id)'>Preview</a>
+            @*@Html.DisplayFor(modelItem => item.Body)*@
+            @*@Html.Raw(Server.HtmlDecode(item.Body))*@
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Created)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedBy)
+        </td>
+        <td>
+            @Html.ActionLink("Edit & Send", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

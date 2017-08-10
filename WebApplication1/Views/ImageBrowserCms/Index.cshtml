@@ -1,0 +1,67 @@
+﻿@model IList<WebApplication1.Models.Medium>
+@{
+    ViewBag.Title = "Index";
+}
+
+@Scripts.Render("~/Scripts/jquery-3.1.1.min.js")
+@Styles.Render("~/Scripts/assets/imagebrowser.css")
+@Scripts.Render("~/Scripts/assets/imagebrowser.js")    
+@Scripts.Render("~/Scripts/assets/jquery.iframe-transport.js")
+@Scripts.Render("~/Scripts/tinymce/jquery.tinymce.js")
+
+
+
+<div class="frame-content-wrapper">
+
+    <div class="file-list-wrapper">
+        @if (Model.Count == 0)
+        {
+            <text>The library is empty. </text>
+        }
+        else
+        {
+            <ul>
+                @foreach (var m in Model)
+                {
+                    <li>
+                        <div class="cms-thumb">
+                            @*<img src="/imagebrowsercms/Thumbnail?path=@(m.NaviNode_Id + "/" + m.Title)" />*@
+                            <img src="@Session["AppURL"].ToString()/imagebrowsercms/Thumbnail?id=@m.Id&path=@(m.NaviNode_Id + "/" + m.Title) "/>
+                        </div>
+                        <strong>@m.MediaFile.FileName</strong>
+                        <span class="cms-filesize">@WebApplication1.Helpers.HtmlHelpers.GetSizeReadable((uint)m.MediaFile.FileSize)</span>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+<div class="browser-footer">
+    <form id="uploadForm" method="post" enctype="multipart/form-data" action="@Session["AppURL"].ToString()/imagebrowsercms/upload">
+        <input type="hidden" name="siteURL" id="siteURL" value="@Session["AppURL"]" />
+        <input type="hidden" name="path" value="@ViewBag.NodeId" />
+
+        <div class="btn container">
+            <button id="cancelBtn" type="button" class="container">
+                <span>Cancel</span>
+            </button>
+        </div>
+        <div class="btn container">
+            <button id="deleteBtn" type="button" class="container">
+                <span>Delete</span>
+            </button>
+        </div>
+        <div class="btn container">
+            <button id="insertBtn" type="button" class="container">
+                <span>Insert</span>
+            </button>
+        </div>
+        <div class="btn container">
+            <label for="fileUpload" class="container">
+                <input type="file" name="file" id="fileUpload" />
+                <span>Upload</span>
+            </label>
+        </div>
+        <div id="ErrorMessage" style="color:red; font-weight: bold"></div>
+    </form>
+</div>

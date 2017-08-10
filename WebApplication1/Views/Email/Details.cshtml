@@ -1,0 +1,78 @@
+﻿@model WebApplication1.Models.BroadcastingEmail
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>BroadcastingEmail</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FromEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FromEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Receiver)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receiver)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.ReadReceiptTo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReadReceiptTo)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Subject)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Subject)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Body)
+        </dt>
+
+        <dd>
+           @Html.Raw(Server.HtmlDecode(Model.Body))
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Created)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    
+@if (!Request.UrlReferrer.ToString().Contains("SentEmails")) { 
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+    @: |
+}
+    @Html.ActionLink("Back to List", "Index")
+</p>

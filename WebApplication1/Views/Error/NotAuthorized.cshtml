@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "NotAuthorized";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>NotAuthorized</h2>
+
+<p>You are not authorized for this request.</p>
+
+@if (Request.UrlReferrer != null)
+{
+    <a class="bottomNav" onclick="history.go(-1); return false;" href="#">Back</a><br />
+}

@@ -1,0 +1,13 @@
+﻿@model WebApplication1.Models.BroadcastingEmail
+
+<div style="border:1px solid #cccccc; overflow:scroll; height:400px">
+    <div style="font-weight:bold; font-size:20px; border-bottom: 1px solid #cccccc">
+        Preview
+    </div>
+       @Html.Raw(Server.HtmlDecode(Model.Body))
+</div>
+<div style="text-align:center">
+
+    <input type="button" value="Close" id="popup-close-btn" />
+
+</div>

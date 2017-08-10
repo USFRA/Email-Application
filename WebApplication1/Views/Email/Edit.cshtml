@@ -1,0 +1,185 @@
+﻿@model WebApplication1.Models.BroadcastingEmail
+
+@{
+    ViewBag.Title = "Edit";
+}
+<script src="~/scripts/tinymce/tinymce.min.js"></script>
+<!-- Script to wire up your TinyMCE editor -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        tinymce.init({
+            selector: "#Body",
+            height: 500,
+            theme: 'modern',
+            menubar: false,
+            plugins: [
+              "advlist autolink lists link image preview anchor",
+              "searchreplace visualblocks code fullscreen",
+              "insertdatetime media contextmenu paste"
+            ],
+            relative_urls: false,
+            convert_urls: false,
+            toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code preview | templates",
+            file_browser_callback_types: "file image media",
+            file_browser_callback: myFileBrowser,
+            image_advtab: true,
+            plugin_preview_width: "850px",
+            plugin_preview_height: "500px"
+        });
+
+        $('#mySubmitButton').click(function () {
+            tinyMCE.triggerSave();
+        });
+
+        $("#SendTestEmail").click(function () {
+
+            var body = $('#Body').val();
+            var subject = $('#Subject').val();
+            var myURL = '@Session["AppURL"]';
+
+            $.ajax({
+                url: myURL + "/email/SendTest",
+                method: "POST",
+                data: {
+                    'body': body,
+                    'subject': subject
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#myElem").show();
+                    setTimeout(function () { $("#myElem").hide(); }, 5000);
+                },
+                error: function (jqXHR, exception) {
+                    console.log(jqXHR);
+                }
+            });
+
+
+        });
+    });
+
+    function myFileBrowser(field_name, url, type, win) {
+        var myURL = '@Session["AppURL"]';
+        var cmsURL = myURL + '/imagebrowsercms/index?path=999';
+        if (cmsURL.indexOf("?") < 0) {
+            cmsURL = cmsURL + "?type=" + type;
+        }
+        else {
+            cmsURL = cmsURL + "&type=" + type;
+        }
+
+        tinyMCE.activeEditor.windowManager.open({
+            file: cmsURL,
+            title: 'File Browser',
+            width: 700,
+            height: 500,
+            resizable: "yes",
+            inline: "no",
+            close_previous: "no"
+        }, {
+            window: win,
+            input: field_name,
+            jquery: parent.$
+        });
+        return false;
+    }
+
+</script>
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>BroadcastingEmail</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FromEmail, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.FromEmail,
+                        new SelectList(ViewBag.Senders, "Email", "Name"),
+                        "Select Sender",
+                        new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FromEmail, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Receiver, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Receiver,
+                        new SelectList(ViewBag.ToEmail, "Email", "Name"),
+                        "Select Receiver",
+                        new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Receiver, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.ReadReceiptTo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ReadReceiptTo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ReadReceiptTo, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Body, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Created, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Created, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CreatedBy, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CreatedBy, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        @Html.Hidden("CreatedBy", @User.Identity.Name, new { @class = "hiddencss", maxlength = 255 });
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Send Email" class="btn btn-default" />
+                <input type="submit" value="Save As Draft" class="btn btn-default" formaction="@Url.Action("Draft","Email")" />
+                <input type="submit" value="Save As Template" class="btn btn-default" formaction="@Url.Action("TemplateSave", "Email")" />
+                <input type="button" value="Preview" class="btn btn-default" onclick="tinyMCE.activeEditor.execCommand('mcePreview');" />
+                <input type="button" id="SendTestEmail" value="Send Test" class="btn btn-default" />
+                <p id="myElem" style="display:none; color:red; font-weight:bold">Test Email Sent.</p>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

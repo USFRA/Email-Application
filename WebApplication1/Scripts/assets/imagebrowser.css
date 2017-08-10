@@ -1,0 +1,132 @@
+﻿.browser-footer{
+    height: 50px;
+    overflow: hidden;
+}
+.file-list-wrapper{
+    height: 417px;
+    overflow-y: scroll;
+}
+.file-list-wrapper ul{
+    margin: 0;
+    padding: 0;
+}
+.file-list-wrapper li{
+    list-style: none;
+    float: left;
+    width: 223px;
+    height: 88px;
+    overflow: hidden;
+    margin: 1px;
+    padding: 0 0 4px;
+    background-position: 0 100px;
+    background-repeat: repeat-x;
+    cursor: pointer;
+}
+
+.file-list-wrapper li.selected{
+    background-color: #aaa;
+}
+.file-list-wrapper li.selected *{
+    color: white;
+}
+.frame-content-wrapper{
+    padding: 15px 0px 15px 15px;
+    border-bottom: 1px solid #ccc;
+}
+.container{
+    margin: 0px;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    vertical-align: top;
+    background: transparent;
+    text-decoration: none;
+    color: #333;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    text-shadow: none;
+    float: none;
+    position: static;
+    width: auto;
+    height: auto;
+    white-space: nowrap;
+    cursor: inherit;
+    -webkit-tap-highlight-color: transparent;
+    line-height: normal;
+    font-weight: normal;
+    text-align: left;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    direction: ltr;
+    max-width: none;
+
+}
+.btn{
+    margin: 10px 5px;
+    border: 1px solid #b1b1b1;
+    border-color: transparent transparent transparent transparent;
+    position: relative;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.75);
+    display: inline-block;
+    background-color: #f0f0f0;
+            
+    float: right;
+}
+.btn:hover{
+    color: #333;
+    background-color: #e3e3e3;
+    border-color: #ccc;
+}
+.btn button,
+.btn label{
+    display: block;
+    padding: 4px 8px;
+    font-size: 14px;
+    line-height: 20px;
+    cursor: pointer;
+    color: #333;
+    text-align: center;
+    overflow: visible;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+}
+label > input[type='file']{
+    position: absolute;
+    left: -999px;
+}
+
+.cms-thumb{
+    float: left;
+    display: inline;
+    width: 80px;
+    height: 80px;
+    margin: 4px 10px 0 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.cms-thumb img{
+    webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.2);
+    margin: 2px 0 0 2px;
+    box-sizing: content-box;
+    border: 0;
+}
+
+.file-list-wrapper strong{
+    float: left;
+    width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 10px 0 4px;
+    font-weight: 400;
+    box-sizing: content-box;
+}
+
+.cms-filesize{
+    display: inline-block;
+    box-sizing: content-box;
+}

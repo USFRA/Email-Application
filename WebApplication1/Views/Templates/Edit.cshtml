@@ -1,0 +1,139 @@
+﻿@model WebApplication1.Models.Template
+
+@{
+    ViewBag.Title = "Edit";
+}
+<script src="~/scripts/tinymce/tinymce.min.js"></script>
+<!-- Script to wire up your TinyMCE editor -->
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        tinymce.init({
+            selector: "#Html",
+            height: 500,
+            theme: 'modern',
+            menubar: false,
+            plugins: [
+              "advlist autolink lists link image preview anchor",
+              "searchreplace visualblocks code fullscreen",
+              "insertdatetime media contextmenu paste"
+            ],
+            relative_urls: false,
+            convert_urls: false,
+            toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code preview | templates",
+            file_browser_callback_types: "file image media",
+            file_browser_callback: myFileBrowser,
+            image_advtab: true,
+            plugin_preview_width: "850px",
+            plugin_preview_height: "500px"
+        });
+
+        $('#mySubmitButton').click(function () {
+            tinyMCE.triggerSave();
+        });
+    });
+
+    function myFileBrowser(field_name, url, type, win) {
+        var myURL = '@Session["AppURL"]';
+        var cmsURL = myURL + '/imagebrowsercms/index?path=999';
+        if (cmsURL.indexOf("?") < 0) {
+            cmsURL = cmsURL + "?type=" + type;
+        }
+        else {
+            cmsURL = cmsURL + "&type=" + type;
+        }
+
+        tinyMCE.activeEditor.windowManager.open({
+            file: cmsURL,
+            title: 'File Browser',
+            width: 700,
+            height: 500,
+            resizable: "yes",
+            inline: "no",
+            close_previous: "no"
+        }, {
+            window: win,
+            input: field_name,
+            jquery: parent.$
+        });
+        return false;
+    }
+
+</script>
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Template</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FromEmail, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.FromEmail,
+                        new SelectList(ViewBag.Senders, "Email", "Name"),
+                        "Select Sender",
+                        new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FromEmail, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Receiver, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Receiver,
+                        new SelectList(ViewBag.ToEmail, "Email", "Name"),
+                        "Select Receiver",
+                        new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Receiver, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Html, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Html, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Html, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.Hidden("CreatedBy", @User.Identity.Name, new { @class = "hiddencss", maxlength = 255 });
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
